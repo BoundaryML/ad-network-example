@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+{% block title %}Search - People Finder{% endblock %}
+{% block content %}
+<h1>Search People by Category Interest</h1>
+
+<form method="get" action="/" class="card">
+  <h2>Select Categories</h2>
+  <div class="cat-chips" style="margin-bottom: 1rem;">
+    {% for cat in categories %}
+    <label class="cat-chip">
+      <input type="checkbox" name="categories" value="{{ cat.id }}"
+             {% if cat.id in selected_ids %}checked{% endif %}>
+      <span>{{ cat.name }}</span>
+    </label>
+    {% endfor %}
+  </div>
+
+  <div class="filter-bar">
+    <label class="toggle-label">
+      <input type="checkbox" name="in_market" {% if in_market %}checked{% endif %}>
+      In Market (last 6 months)
+    </label>
+
+    <label style="font-size: 0.85rem; color: #666; margin-left: 0.5rem;">Sort by:</label>
+    <select name="sort_by">
+      <option value="score" {% if sort_by == 'score' %}selected{% endif %}>Score</option>
+      <option value="intensity" {% if sort_by == 'intensity' %}selected{% endif %}>Intensity</option>
+      <option value="clicks" {% if sort_by == 'clicks' %}selected{% endif %}>Clicks</option>
+      <option value="coverage" {% if sort_by == 'coverage' %}selected{% endif %}>Coverage</option>
+    </select>
+
+    <button type="submit" class="btn btn-primary">Search</button>
+    <a href="/" class="btn btn-ghost">Clear</a>
+  </div>
+</form>
+
+{% if selected_ids %}
+<div class="stat-grid">
+  <div class="stat-box">
+    <div class="label">Results</div>
+    <div class="value">{{ results|length }}</div>
+  </div>
+  <div class="stat-box">
+    <div class="label">Matching Ads</div>
+    <div class="value">{{ matching_ad_count }}</div>
+  </div>
+  <div class="stat-box">
+    <div class="label">Categories</div>
+    <div class="value">{{ selected_ids|length }}</div>
+  </div>
+  <div class="stat-box">
+    <div class="label">In Market</div>
+    <div class="value">{{ results|selectattr('in_market')|list|length }}</div>
+  </div>
+</div>
+
+{% if results %}
+<div class="card" style="padding: 0; overflow-x: auto;">
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 50px;">#</th>
+        <th>Name</th>
+        <th>Company</th>
+        <th>Title</th>
+        <th>Score</th>
+        <th>Clicks</th>
+        <th>Intensity</th>
+        <th>Coverage</th>
+        <th>In Market</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in results %}
+      <tr>
+        <td>
+          <span class="rank-num {% if loop.index == 1 %}rank-1{% elif loop.index == 2 %}rank-2{% elif loop.index == 3 %}rank-3{% else %}rank-other{% endif %}">
+            {{ loop.index }}
+          </span>
+        </td>
+        <td><a href="/person/{{ r.person.id }}"><strong>{{ r.person.name }}</strong></a></td>
+        <td>{{ r.person.company }}</td>
+        <td>{{ r.person.title }}</td>
+        <td>
+          <div class="score-bar">
+            <span style="font-weight: 600;">{{ "%.1f"|format(r.score) }}</span>
+            <div class="bar"><div class="fill" style="width: {{ r.score }}%;"></div></div>
+          </div>
+        </td>
+        <td>{{ r.absolute_clicks }}</td>
+        <td>
+          <span class="badge {% if r.intensity >= 0.5 %}badge-green{% elif r.intensity >= 0.25 %}badge-blue{% else %}badge-gray{% endif %}">
+            {{ "%.0f"|format(r.intensity * 100) }}%
+          </span>
+        </td>
+        <td>
+          <span class="badge {% if r.category_coverage == 1.0 %}badge-green{% elif r.category_coverage >= 0.5 %}badge-amber{% else %}badge-gray{% endif %}">
+            {{ "%.0f"|format(r.category_coverage * 100) }}%
+          </span>
+          <span style="font-size: 0.75rem; color: #888; margin-left: 0.25rem;">
+            {{ r.categories_matched|join(", ") }}
+          </span>
+        </td>
+        <td>
+          {% if r.in_market %}
+            <span class="badge badge-green">Yes</span>
+          {% else %}
+            <span class="badge badge-gray">No</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="card empty">
+  No people matched the selected categories{% if in_market %} with the in-market filter{% endif %}.
+</div>
+{% endif %}
+
+{% else %}
+<div class="card empty">
+  Select one or more categories above and click <strong>Search</strong> to find people.
+</div>
+{% endif %}
+{% endblock %}

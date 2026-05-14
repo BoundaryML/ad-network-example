@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block title %}{{ person.name }} - People Finder{% endblock %}
+{% block content %}
+<div class="card">
+  <div class="person-header">
+    <div class="person-avatar">{{ person.name[0] }}</div>
+    <div class="person-info">
+      <h1>{{ person.name }}</h1>
+      <div class="person-meta">
+        {{ person.title }} at <strong>{{ person.company }}</strong>
+      </div>
+      <div class="person-meta" style="font-size: 0.8rem;">{{ person.email }}</div>
+    </div>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat-box">
+      <div class="label">Total Clicks</div>
+      <div class="value">{{ total_clicks }}</div>
+    </div>
+    <div class="stat-box">
+      <div class="label">Unique Ads</div>
+      <div class="value">{{ unique_ads }}</div>
+    </div>
+    <div class="stat-box">
+      <div class="label">Categories</div>
+      <div class="value">{{ cat_engagement|length }}</div>
+    </div>
+  </div>
+</div>
+
+{% if cat_engagement %}
+<h2>Category Engagement</h2>
+<div class="card" style="padding: 0; overflow-x: auto;">
+  <table>
+    <thead>
+      <tr>
+        <th>Category</th>
+        <th>Clicks</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% set max_cat_clicks = cat_engagement[0].clicks if cat_engagement else 1 %}
+      {% for ce in cat_engagement %}
+      <tr>
+        <td><strong>{{ ce.name }}</strong></td>
+        <td>{{ ce.clicks }}</td>
+        <td style="width: 40%;">
+          <div class="bar" style="width: 100%; height: 8px; background: #e5e7eb; border-radius: 4px;">
+            <div class="fill" style="width: {{ (ce.clicks / max_cat_clicks * 100)|round }}%; height: 100%; background: #2563eb; border-radius: 4px;"></div>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
+
+{% if click_history %}
+<h2>Click History</h2>
+<div class="card" style="padding: 0; overflow-x: auto;">
+  <table>
+    <thead>
+      <tr>
+        <th>Ad</th>
+        <th>Ad Name</th>
+        <th>Categories</th>
+        <th>Clicks</th>
+        <th>Last Click</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for ch in click_history %}
+      <tr>
+        <td style="color: #888; font-size: 0.8rem;">{{ ch.ad_id }}</td>
+        <td><strong>{{ ch.ad_name }}</strong></td>
+        <td>
+          {% for cat in ch.categories %}
+          <span class="badge badge-blue">{{ cat }}</span>
+          {% endfor %}
+        </td>
+        <td>{{ ch.click_count }}</td>
+        <td>{{ ch.last_click }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
+
+{% if not click_history and not cat_engagement %}
+<div class="card empty">
+  No click history for this person.
+</div>
+{% endif %}
+{% endblock %}

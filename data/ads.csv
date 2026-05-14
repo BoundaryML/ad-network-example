@@ -1,0 +1,41 @@
+ad_id,ad_name,category_ids
+AD-001,FlexMove Belt Conveyor Series,CAT-001|CAT-010
+AD-002,SpeedPack Cartoner 3000,CAT-002|CAT-003
+AD-003,AutoLabel Pro X1,CAT-004|CAT-009
+AD-004,PalletMax Robotic Palletizer,CAT-005|CAT-011
+AD-005,VisionGuard Inline Inspector,CAT-006|CAT-012
+AD-006,LiquidFill Precision Filler,CAT-007|CAT-003
+AD-007,WrapTight Stretch Wrapper,CAT-008|CAT-003
+AD-008,JetMark Industrial Coder,CAT-009|CAT-015
+AD-009,GripSort Automated Sorter,CAT-014|CAT-010
+AD-010,MegaLift AGV Fleet,CAT-010|CAT-013
+AD-011,RoboArm Pick & Place,CAT-011|CAT-005
+AD-012,QC-Scan 360 Defect Detector,CAT-012|CAT-006
+AD-013,SmartStore WMS Platform,CAT-013|CAT-010
+AD-014,ConveyorLink Modular System,CAT-001|CAT-010|CAT-011
+AD-015,CartoPack Integrated Line,CAT-002|CAT-003|CAT-008
+AD-016,LabelJet High-Speed Applicator,CAT-004|CAT-015
+AD-017,PalletWrap Combo System,CAT-005|CAT-008
+AD-018,FillSeal Pouch Machine,CAT-007|CAT-003|CAT-004
+AD-019,CodeVision Print & Verify,CAT-009|CAT-006|CAT-015
+AD-020,AutoSort Distribution Hub,CAT-014|CAT-013|CAT-010
+AD-021,InspectAI Deep Learning QC,CAT-006|CAT-012|CAT-011
+AD-022,FlexiConveyor Curve Module,CAT-001
+AD-023,NanoPrint Inkjet Coder,CAT-009
+AD-024,BoxForm Carton Erector,CAT-002
+AD-025,ShrinkPro Tunnel System,CAT-008|CAT-003
+AD-026,PadApply Cushion Inserter,CAT-003|CAT-010
+AD-027,TrayPack Denesting System,CAT-003|CAT-002|CAT-005
+AD-028,WeighCheck Dynamic Scale,CAT-006|CAT-012
+AD-029,StackBot Layer Palletizer,CAT-005|CAT-011
+AD-030,RackMaster AS/RS System,CAT-013|CAT-010
+AD-031,FlexGrip Robotic Packer,CAT-011|CAT-003|CAT-005
+AD-032,ServoFill Gravity Filler,CAT-007
+AD-033,WrapStar Orbital Wrapper,CAT-008
+AD-034,MetalScan Detector Pro,CAT-006|CAT-012
+AD-035,DigiPrint Variable Data,CAT-015|CAT-009
+AD-036,SmartBelt IoT Conveyor,CAT-001|CAT-011
+AD-037,CartonSeal Tape Machine,CAT-002|CAT-003
+AD-038,RFID-Tag Inline Labeler,CAT-004|CAT-009|CAT-006
+AD-039,HygiePack Clean Room Line,CAT-003|CAT-007|CAT-012
+AD-040,DockBot Loading System,CAT-010|CAT-013|CAT-011

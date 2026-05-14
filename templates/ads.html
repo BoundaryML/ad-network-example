@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Ads - People Finder{% endblock %}
+{% block content %}
+<div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+  <h1 style="margin-bottom: 0;">Ads{% if filter_name %} in {{ filter_name }}{% endif %}</h1>
+  {% if filter_name %}
+  <a href="/ads" class="btn btn-ghost" style="font-size: 0.8rem;">Show all</a>
+  {% endif %}
+</div>
+
+<div class="card" style="margin-bottom: 1rem;">
+  <label style="font-size: 0.85rem; font-weight: 500; color: #666;">Filter by category:</label>
+  <div class="cat-chips" style="margin-top: 0.5rem;">
+    {% for cat in all_categories %}
+    <a href="/ads?category={{ cat.id }}" style="text-decoration: none;">
+      <span class="badge {% if category_filter == cat.id %}badge-blue{% else %}badge-gray{% endif %}" style="cursor: pointer; font-size: 0.8rem; padding: 0.3rem 0.6rem;">
+        {{ cat.name }}
+      </span>
+    </a>
+    {% endfor %}
+  </div>
+</div>
+
+<div class="card" style="padding: 0; overflow-x: auto;">
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Ad Name</th>
+        <th>Categories</th>
+        <th>Total Clicks</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for ad in ads %}
+      <tr>
+        <td style="color: #888; font-size: 0.8rem;">{{ ad.id }}</td>
+        <td><strong>{{ ad.name }}</strong></td>
+        <td>
+          {% for cat in ad.categories %}
+          <span class="badge badge-blue">{{ cat }}</span>
+          {% endfor %}
+        </td>
+        <td>{{ ad.click_count }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<p style="font-size: 0.85rem; color: #888; margin-top: 0.5rem;">{{ ads|length }} ads</p>
+{% endblock %}

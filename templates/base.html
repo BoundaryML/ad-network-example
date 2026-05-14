@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}People Finder{% endblock %}</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f5f6f8;
+      color: #1a1a2e;
+      line-height: 1.5;
+    }
+
+    nav {
+      background: #1a1a2e;
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      height: 56px;
+    }
+    nav .logo {
+      color: #fff;
+      font-weight: 700;
+      font-size: 1.1rem;
+      text-decoration: none;
+      letter-spacing: -0.5px;
+    }
+    nav .links { display: flex; gap: 0.25rem; }
+    nav a.nav-link {
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      font-size: 0.875rem;
+      padding: 0.4rem 0.75rem;
+      border-radius: 6px;
+      transition: all 0.15s;
+    }
+    nav a.nav-link:hover, nav a.nav-link.active {
+      color: #fff;
+      background: rgba(255,255,255,0.1);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1.5rem 2rem;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      letter-spacing: -0.5px;
+    }
+    h2 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 10px;
+      border: 1px solid #e2e4e9;
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+    }
+    thead th {
+      text-align: left;
+      padding: 0.6rem 0.75rem;
+      border-bottom: 2px solid #e2e4e9;
+      font-weight: 600;
+      color: #555;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+      cursor: pointer;
+      user-select: none;
+    }
+    thead th.sortable:hover { color: #1a1a2e; }
+    thead th.sorted { color: #2563eb; }
+    tbody td {
+      padding: 0.6rem 0.75rem;
+      border-bottom: 1px solid #f0f0f3;
+      vertical-align: top;
+    }
+    tbody tr:hover { background: #f8f9fb; }
+    tbody tr:last-child td { border-bottom: none; }
+
+    a { color: #2563eb; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .badge {
+      display: inline-block;
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    .badge-green { background: #dcfce7; color: #166534; }
+    .badge-gray { background: #f1f1f4; color: #666; }
+    .badge-blue { background: #dbeafe; color: #1e40af; }
+    .badge-amber { background: #fef3c7; color: #92400e; }
+
+    .score-bar {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .score-bar .bar {
+      width: 60px;
+      height: 6px;
+      background: #e5e7eb;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .score-bar .bar .fill {
+      height: 100%;
+      border-radius: 3px;
+      background: #2563eb;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+    .stat-box {
+      background: #f8f9fb;
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+    }
+    .stat-box .label {
+      font-size: 0.75rem;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .stat-box .value {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #1a1a2e;
+    }
+
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    .filter-bar label {
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    .cat-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+    .cat-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .cat-chip input[type="checkbox"] { display: none; }
+    .cat-chip span {
+      padding: 0.3rem 0.7rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      border: 1.5px solid #d1d5db;
+      color: #555;
+      cursor: pointer;
+      transition: all 0.15s;
+      user-select: none;
+    }
+    .cat-chip input:checked + span {
+      background: #2563eb;
+      border-color: #2563eb;
+      color: #fff;
+    }
+    .cat-chip span:hover {
+      border-color: #2563eb;
+      color: #2563eb;
+    }
+    .cat-chip input:checked + span:hover {
+      background: #1d4ed8;
+      color: #fff;
+    }
+
+    .toggle-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.85rem;
+      cursor: pointer;
+      padding: 0.3rem 0.7rem;
+      border-radius: 999px;
+      border: 1.5px solid #d1d5db;
+      transition: all 0.15s;
+      user-select: none;
+    }
+    .toggle-label:has(input:checked) {
+      background: #dcfce7;
+      border-color: #16a34a;
+      color: #166534;
+    }
+    .toggle-label input { display: none; }
+
+    select {
+      padding: 0.35rem 0.6rem;
+      border: 1.5px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      background: #fff;
+    }
+
+    button, .btn {
+      padding: 0.4rem 1rem;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-primary {
+      background: #2563eb;
+      color: #fff;
+    }
+    .btn-primary:hover { background: #1d4ed8; }
+    .btn-ghost {
+      background: transparent;
+      color: #666;
+      border: 1.5px solid #d1d5db;
+    }
+    .btn-ghost:hover {
+      border-color: #999;
+      color: #333;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 3rem;
+      color: #888;
+      font-size: 0.95rem;
+    }
+
+    .rank-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    .rank-1 { background: #fef3c7; color: #92400e; }
+    .rank-2 { background: #e5e7eb; color: #374151; }
+    .rank-3 { background: #fed7aa; color: #9a3412; }
+    .rank-other { background: #f3f4f6; color: #6b7280; }
+
+    .person-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 1.25rem;
+      margin-bottom: 1rem;
+    }
+    .person-avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: #2563eb;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .person-info h1 { margin-bottom: 0.15rem; }
+    .person-meta {
+      font-size: 0.9rem;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="/" class="logo">People Finder</a>
+    <div class="links">
+      <a href="/" class="nav-link {% if request.path == '/' %}active{% endif %}">Search</a>
+      <a href="/categories" class="nav-link {% if request.path == '/categories' %}active{% endif %}">Categories</a>
+      <a href="/ads" class="nav-link {% if request.path == '/ads' %}active{% endif %}">Ads</a>
+    </div>
+  </nav>
+  <div class="container">
+    {% block content %}{% endblock %}
+  </div>
+</body>
+</html>
